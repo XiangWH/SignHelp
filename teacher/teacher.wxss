@@ -9,9 +9,15 @@
     margin-left: 10rpx;
     -moz-text-size-adjust: auto;
 }
+.text2{
+    color: gray;
+    margin-left: 10rpx;
+    -moz-text-size-adjust: auto;
+}
 .list{
     margin: 10rpx;
-    border-bottom: 1px solid gray;
+    border-top:  1px solid gainsboro;
+  
 }
 .button{
     margin-top: 20rpx;
@@ -20,4 +26,7 @@
 .buttonCancel{
     margin-top: 20rpx;
     text-align: center;
+}
+.template{
+    margin: 20rpx 00rpx 0rpx 20rpx;
 }

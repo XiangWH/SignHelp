@@ -2,19 +2,21 @@
 <import src="../course_view_template.wxml"/>
 
 <view class='top'>
-    <button class='button' size='mini' bindtap='createCourse'>创建课程</button>
+    <button class='button' size='mini' bindtap='createCourse' type='primary'>创建课程</button>
    
 </view>
-<scroll-view scroll-y='true' >
+
+<scroll-view scroll-y='true' style='height : 550rpx'>
 <view class='list' wx:for="{{courseOfTeacher}}" wx:key="{{courseId}}" 
 data-id='{{courseId}}'>
   <template is="course_view" data='{{...item}}'/>
-
 </view>
+  <view style=' border-bottom: 1px solid gainsboro;'></view>
+  </scroll-view>
 <view wx:if="{{condition}}" class='top' >
     <button class='button' bindtap='releaseSignin'plain='true' type='primary'>发起签到</button>
     <button class='button'  bindtap='deleteCourse' plain='true' type='warn'>删除课程</button>
     <button class='button' bindtap='cancel' plain='true' >取消</button>
 </view>
-</scroll-view>
+
 
