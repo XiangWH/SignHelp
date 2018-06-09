@@ -1,6 +1,8 @@
 // pages/teacher/teacher.js
-var Url = '';
-var idNum = require('./teacher');
+var qcloud = require('../../vendor/wafer2-client-sdk/index')
+var config = require('../../config')
+var util = require('../../utils/util.js')
+var app = getApp();
 Page({
 
   /**
@@ -19,50 +21,10 @@ Page({
         classTime2: "10:00-11:40",
         classRoom2: "B303",
         allStudentsNum: "Unknow",
-        courseId: "1"
-    },
-        {
-            courseName: "系统分析与设计2",
-            placeOfClass: "UnKnow",
-            classTime1: "10:00-11:40", 
-            classRoom1: "B303",
-            classTime2: "10:00-11:40",
-            classRoom2: "B303",
-            allStudentsNum: "Unknow",
-            courseId: "2"
-        },
-        {
-            courseName: "系统分析与设计3",
-            placeOfClass: "UnKnow",
-            classTime1: "10:00-11:40",
-            classRoom1: "B303",
-            classTime2: "10:00-11:40",
-            classRoom2: "B303",
-            allStudentsNum: "Unknow",
-            courseId: "3"
-        },
-        {
-            courseName: "系统分析与设计4",
-            placeOfClass: "UnKnow",
-            classTime1: "10:00-11:40",
-            classRoom1: "B303",
-            classTime2: "10:00-11:40",
-            classRoom2: "B303",
-            allStudentsNum: "Unknow",
-            courseId: "4"
-        },
-        {
-            courseName: "系统分析与设计5",
-            placeOfClass: "UnKnow",
-            classTime1: "10:00-11:40",
-            classRoom1: "B303",
-            classTime2: "10:00-11:40",
-            classRoom2: "B303",
-            allStudentsNum: "Unknow",
-            courseId: "5"
-        }
-    ]
+        courseId: "000"
+    }]
   },
+
 
 
   /**
@@ -109,28 +71,29 @@ Page({
         })
     },
 
+
+
     /**
      * 网络请求得到课程
      * idNum传递课程id
      * 通过processCourseData增加数据
-     */
+     * */
     getCourse:function() {
-        wx.request({
-            url: Url,
-            data:{
-                id:idNum
+        qcloud.request({
+            url: `${config.service.host}/weapp/getTCourses`,
+            data: {
+                idNum: app.globalData.idNum
             },
-            success:function(res) {
+            success: function (res) {
                 var data = res.data;
                 processCourseData(data); //赋值，参加下方函数
             }
         })
     },
 
-
     /**
      * 为本地的course赋值，设立临时变量进行添加
-     */
+    */
     processCourseData:function(data) {
         var that = this;
         var temp = {
@@ -149,31 +112,34 @@ Page({
             courseOfTeacher : courseTemp
         })
     },
-
+  
 
     /**
      * 设置限时10min，修改签到标志，获取系统时间
      * 发起后转为canSignIn
      * 超过时间后转换为notSignIn
      */
-    releaseSignin:function(e) {
+    releaseSignIn:function(e) {
         this.setData({
             signInFlag:true
         });
         var that = this;
-        console.log("signInFlag：" + this.data.signInFlag);
+        var time = new Date().toLocaleDateString();
+        
+        console.log("signInFlag：" + this.data.signInFlag + " time " + time);
        /**标志有效则可以进行  */
         if (this.data.signInFlag == true) {
-            wx.request({
-                url: Url,
+            qcloud.request({
+                url: `${config.service.host}/weapp/releaseSignIn`,
                 data: {
-                    id:this.data.conditionId,
-                    name:'canSignIn'
-                    },
-                header: {},
-                method: 'POST',
-                dataType: 'json',
-                responseType: 'text',
+                    courseId:this.data.conditionId,
+                    signInFlag:true,
+                    sysTime:time
+                },
+                //header: {},
+                //method: 'POST',
+                //dataType: 'json',
+                //responseType: 'text',
                 success: function(res) {
                     console.log("签到请求发送成功")
                 },
@@ -185,13 +151,14 @@ Page({
         } 
         //设置10分钟后发送停止签到标签，现在为了简便设置时间为10秒
         setTimeout(
-            function()  {wx.request({
-                url: Url,
+            function()  {
+                qcloud.request({
+                    url: `${config.service.host}/weapp/releaseSignIn`,
                 data: {
                     id: that.data.conditionId,
-                    name: 'notSignIn'
+                    signInFlag: false,
                    },
-                method: 'POST',
+                //method: 'POST',
                 success: function (res) {
                    console.log("停止签到请求发送成功")
                 },
@@ -207,6 +174,7 @@ Page({
         })
     },
 
+
     /**
     *删除课程，在本地删除后传递给服务器要删除的课程编号 
     */
@@ -218,18 +186,19 @@ Page({
         this.setData({
             courseOfTeacher: newCourse
             })
-        wx.request({
-            url: Url,
+        
+        qcloud.request({
+            url: `${config.service.host}/weapp/deleteTCourse`,
             data: {
-                id:this.data.conditionId,
-                name:'delete'
+                id:this.data.conditionId
             },
-            header: {},
-            method: 'POST',
-            dataType: 'json',
-            responseType: 'text',
+            //header: {},
+            //method: 'POST',
+            //dataType: 'json',
+            //responseType: 'text',
             success: function(res) {
                 console.log("课程已经成功删除")
+
             },
             fail: function(res) {
                 console.log('课程删除失败')
@@ -241,18 +210,23 @@ Page({
             condition:false
         })
     },
+  
+
   /**
    * 生命周期函数--监听页面加载
+   * * 网络请求得到课程
+     * idNum传递课程id
+     * 通过processCourseData增加数据
    */
   onLoad: function (options) {
-  
+     this.getCourse();
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
+      
   },
 
   /**
