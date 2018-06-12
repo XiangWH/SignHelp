@@ -7,8 +7,8 @@
 </view>
 
 <scroll-view scroll-y='true' style='height : 550rpx'>
-<view class='list' wx:for="{{courseOfTeacher}}" wx:key="{{courseId}}" 
-data-id='{{courseId}}'>
+<view class='list' wx:for="{{courseOfTeacher}}" 
+data-id='{{courseId}}' >
   <template is="course_view" data='{{...item}}'/>
 </view>
   <view style=' border-bottom: 1px solid gainsboro;'></view>

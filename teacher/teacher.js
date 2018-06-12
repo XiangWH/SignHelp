@@ -3,6 +3,7 @@ var qcloud = require('../../vendor/wafer2-client-sdk/index')
 var config = require('../../config')
 var util = require('../../utils/util.js')
 var app = getApp();
+
 Page({
 
   /**
@@ -12,20 +13,8 @@ Page({
       condition:false, //用于决定长按列表是否显示
       conditionId:0, //侦测长按点击的Id并且将其进行传输
       signInFlag:false, //发起签到使用的标志
-   
-    courseOfTeacher:[{
-        courseName: "系统分析与设计",
-        placeOfClass: "UnKnow",
-        classTime1: "10:00-11:40",
-        classRoom1: "B303",
-        classTime2: "10:00-11:40",
-        classRoom2: "B303",
-        allStudentsNum: "Unknow",
-        courseId: "000"
-    }]
+      courseOfTeacher:[]
   },
-
-
 
   /**
    * 点击list进行跳转
@@ -33,8 +22,8 @@ Page({
     operateTap:function(e) {
         console.log("id为：" + e.currentTarget.dataset.id);
         var courseId = e.currentTarget.dataset.id;
-        wx.redirectTo({
-            url: '/pages/createCourse/createCourse',
+        wx.navigateTo({
+            url: '/pages/manageCourse/manageCourse?type='+courseId,
         })
     },
 
@@ -45,9 +34,10 @@ Page({
     operateLongTap:function(e) {       
         this.setData({
             condition:true,
-            conditionId:e.currentTarget.dataset.id
+            conditionId:e.currentTarget.dataset.id,
         })
         console.log("长按获得的ID为" + this.data.conditionId);
+       
     },
 
     /**
@@ -79,40 +69,43 @@ Page({
      * 通过processCourseData增加数据
      * */
     getCourse:function() {
+        var that = this;
         qcloud.request({
             url: `${config.service.host}/weapp/getTCourses`,
             data: {
                 idNum: app.globalData.idNum
-            },
+            }, 
+            login : true,
             success: function (res) {
-                var data = res.data;
-                processCourseData(data); //赋值，参加下方函数
-            }
+                console.log(res.data.data);
+                var data2 =res.data.data
+                var courses = [];
+                for (let idx in data2) {
+                    var temp = {
+                        courseName: data2[idx].courseName,
+                        placeOfClass: data2[idx].placeOfClass,
+                        classTime1: data2[idx].classTime1,
+                        classRoom1: data2[idx].classroom1,
+                        classTime2: data2[idx].classTime2,
+                        classRoom2: data2[idx].classroom2,
+                        allStudents: data2[idx].allStudents,
+                        courseId: data2[idx].courseId
+                    };
+                    console.log(temp)
+                    courses.push(temp);
+                }
+              console.log(courses)
+              that.setData({
+                    courseOfTeacher:courses
+              })
+                },
+            fail(error) {
+               util.showModel('请求失败', error);
+               console.log('request fail', error);
+           }            
         })
     },
 
-    /**
-     * 为本地的course赋值，设立临时变量进行添加
-    */
-    processCourseData:function(data) {
-        var that = this;
-        var temp = {
-            courseName : data.courseName,
-            placeOfClass : data.placeOfClass,
-            classTime1 : data.classTime1,
-            classRoom1 : data.classRoom1,
-            classTime2 : data.classTime2,
-            classRoom2 : data.classRoom2,
-            allStudentsNum : data.allStudentsNum,
-            courseId : courseId
-        };
-        var courseTemp = this.data.courseOfTeacher;
-        courseTemp.push(temp);
-        that.setData({
-            courseOfTeacher : courseTemp
-        })
-    },
-  
 
     /**
      * 设置限时10min，修改签到标志，获取系统时间
@@ -131,9 +124,10 @@ Page({
         if (this.data.signInFlag == true) {
             qcloud.request({
                 url: `${config.service.host}/weapp/releaseSignIn`,
+                login: true,
                 data: {
                     courseId:this.data.conditionId,
-                    signInFlag:true,
+                    signInFlag:1,
                     sysTime:time
                 },
                 //header: {},
@@ -154,9 +148,10 @@ Page({
             function()  {
                 qcloud.request({
                     url: `${config.service.host}/weapp/releaseSignIn`,
+                    login: true,
                 data: {
                     id: that.data.conditionId,
-                    signInFlag: false,
+                    signInFlag: 0,
                    },
                 //method: 'POST',
                 success: function (res) {
@@ -166,7 +161,7 @@ Page({
                     console.log("停止签到请求发送失败")
                 },
             }) 
-            }, 2000);
+            }, 60000);
 
         //令其自动收回
         this.setData({
@@ -180,35 +175,39 @@ Page({
     */
     deleteCourse:function(e) {
         console.log("要删除的课程ID是：" + this.data.conditionId);
+       
         var newCourse = this.data.courseOfTeacher;
         var index = this.data.conditionId;
-        newCourse.splice(index-1,1);
+        for(let idx in newCourse) {
+            if(newCourse[idx].courseId == index) {
+                newCourse.splice(idx, 1)
+            }
+        }
         this.setData({
             courseOfTeacher: newCourse
-            })
-        
+        })
+
         qcloud.request({
             url: `${config.service.host}/weapp/deleteTCourse`,
+             login : true,
             data: {
-                id:this.data.conditionId
+                courseId:this.data.conditionId
             },
-            //header: {},
-            //method: 'POST',
-            //dataType: 'json',
-            //responseType: 'text',
             success: function(res) {
                 console.log("课程已经成功删除")
 
             },
-            fail: function(res) {
-                console.log('课程删除失败')
-            },
+            fail(error) {
+                util.showModel('课程删除请求失败', error);
+                console.log('request fail', error);
+            },       
             complete: function(res) {},
         })
         //令其自动收回
         this.setData({
             condition:false
         })
+       
     },
   
 
@@ -233,7 +232,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+      //this.getCourse();
   },
 
   /**
@@ -271,3 +270,4 @@ Page({
   
   }
 })
+
