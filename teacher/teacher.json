@@ -3,5 +3,6 @@
     "navigationBarTextStyle": "white",
     "navigationBarTitleText": "教师界面",
     "backgroundColor": "#efefef",
-    "backgroundTextStyle": "light"
+    "backgroundTextStyle": "light",
+    "enablePullDownRefresh": true
 }

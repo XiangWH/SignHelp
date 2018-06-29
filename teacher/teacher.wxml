@@ -2,8 +2,9 @@
 <import src="../course_view_template.wxml"/>
 
 <view class='top'>
-    <button class='button' size='mini' bindtap='createCourse' type='primary'>创建课程</button>
-   
+    <navigator url="../createCourse/createCourse" open-type="navigate" class="uploader-text">
+           <button class='button' size='mini'  type='primary'>创建课程</button>
+    </navigator>
 </view>
 
 <scroll-view scroll-y='true' style='height : 550rpx'>

@@ -12,7 +12,7 @@ Page({
   data: {
       condition:false, //用于决定长按列表是否显示
       conditionId:0, //侦测长按点击的Id并且将其进行传输
-      signInFlag:false, //发起签到使用的标志
+      signInFlag:0, //发起签到使用的标志
       courseOfTeacher:[]
   },
 
@@ -25,6 +25,10 @@ Page({
         wx.navigateTo({
             url: '/pages/manageCourse/manageCourse?type='+courseId,
         })
+    },
+
+    onPullDownReflash() {
+        this.getCourse();
     },
 
     /**
@@ -53,16 +57,12 @@ Page({
      * 跳转到创建课程
      */
     createCourse:function() {
-        wx.redirectTo({
+        wx.navigateTo({
             url: '/pages/createCourse/createCourse',
-            success: function(res) {},
-            fail: function(res) {},
-            complete: function(res) {},
         })
     },
 
-
-
+   
     /**
      * 网络请求得到课程
      * idNum传递课程id
@@ -73,11 +73,10 @@ Page({
         qcloud.request({
             url: `${config.service.host}/weapp/getTCourses`,
             data: {
-                idNum: app.globalData.idNum
+                idNum:app.globalData.idNum
             }, 
             login : true,
             success: function (res) {
-                console.log(res.data.data);
                 var data2 =res.data.data
                 var courses = [];
                 for (let idx in data2) {
@@ -91,7 +90,7 @@ Page({
                         allStudents: data2[idx].allStudents,
                         courseId: data2[idx].courseId
                     };
-                    console.log(temp)
+                    //console.log(temp)
                     courses.push(temp);
                 }
               console.log(courses)
@@ -106,6 +105,14 @@ Page({
         })
     },
 
+    /**
+     * 
+     */
+    /*addArray:function() {
+      var that = this;
+      var newData;
+      that.data.courseOfTeacher.push(newData);
+    },*/
 
     /**
      * 设置限时10min，修改签到标志，获取系统时间
@@ -114,31 +121,28 @@ Page({
      */
     releaseSignIn:function(e) {
         this.setData({
-            signInFlag:true
+            signInFlag:1
         });
         var that = this;
         var time = new Date().toLocaleDateString();
         
-        console.log("signInFlag：" + this.data.signInFlag + " time " + time);
+        console.log("signInFlag：" + this.data.signInFlag + " time :" + time);
        /**标志有效则可以进行  */
-        if (this.data.signInFlag == true) {
+        if (this.data.signInFlag == 1) {
             qcloud.request({
-                url: `${config.service.host}/weapp/releaseSignIn`,
+                url: `${config.service.host}/weapp/releaseSignIn_1`,
                 login: true,
                 data: {
                     courseId:this.data.conditionId,
                     signInFlag:1,
-                    sysTime:time
+                    idNum:app.globalData.idNum
                 },
-                //header: {},
-                //method: 'POST',
-                //dataType: 'json',
-                //responseType: 'text',
-                success: function(res) {
-                    console.log("签到请求发送成功")
+                success(res) {
+                  console.log('发起签到成功')
                 },
-                fail: function(res) {
-                    console.log("签到请求发送失败")
+                fail(error) {
+                  util.showModel('发起签到失败', error);
+                  console.log('request fail', error);
                 },
                 complete: function(res) {},
             })
@@ -147,21 +151,22 @@ Page({
         setTimeout(
             function()  {
                 qcloud.request({
-                    url: `${config.service.host}/weapp/releaseSignIn`,
+                    url: `${config.service.host}/weapp/releaseSignIn_2`,
                     login: true,
                 data: {
-                    id: that.data.conditionId,
+                    courseId: that.data.conditionId,
                     signInFlag: 0,
                    },
                 //method: 'POST',
-                success: function (res) {
-                   console.log("停止签到请求发送成功")
+                success(res) {
+                  console.log('停止签到成功')
                 },
-                fail: function (res) {
-                    console.log("停止签到请求发送失败")
+                fail(error) {
+                  util.showModel('停止签到失败', error);
+                  console.log('request fail', error);
                 },
             }) 
-            }, 60000);
+            }, 3000);
 
         //令其自动收回
         this.setData({
@@ -169,7 +174,9 @@ Page({
         })
     },
 
-
+  onPullDownRefresh() {
+    this.getCourse();
+  },
     /**
     *删除课程，在本地删除后传递给服务器要删除的课程编号 
     */
@@ -195,7 +202,7 @@ Page({
             },
             success: function(res) {
                 console.log("课程已经成功删除")
-
+                
             },
             fail(error) {
                 util.showModel('课程删除请求失败', error);
@@ -218,28 +225,29 @@ Page({
      * 通过processCourseData增加数据
    */
   onLoad: function (options) {
-     this.getCourse();
+    this.getCourse();
+    //wx.navigateBack();
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-      
+    
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-      //this.getCourse();
+      this.getCourse();
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-  
+     
   },
 
   /**
@@ -253,7 +261,16 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-  
+   
+         
+          wx.showToast({
+              title: '刷新成功',//提示信息
+              icon: 'success',//成功显示图标
+              duration: 2000//时间
+          })
+          this.onLoad();
+          wx.stopPullDownRefresh();
+      
   },
 
   /**
