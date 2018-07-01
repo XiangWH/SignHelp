@@ -1,0 +1,45 @@
+<!--pages/checksignchart/checksignchart.wxml-->
+<!--text>pages/checksignchart/checksignchart.wxml</text-->
+<view class="table">
+  <view class="tr bg-w">
+    <view class="th" style = "width:100px">学号</view>
+    <view class="th " style = "width:30px">1签</view>
+    <view class="th " style = "width:30px">2签</view>
+    <view class="th " style = "width:30px">3签</view>
+    <view class="th " style = "width:30px">4签</view>
+    <view class="th " style = "width:30px">5签</view>
+    <view class="th " style = "width:30px">6签</view>
+    <view class="th " style = "width:30px">7签</view>
+    <view class="th " style = "width:30px">8签</view>
+    <view class="th " style = "width:30px">9签</view>
+    <view class="th " style = "width:30px">10签</view>
+  </view>
+  <block wx:for="{{listData}}" wx:key="{{code}}">
+    <view class="tr bg-g" wx:if = "{{code % 2 == 0}}">
+      <view class="td" >{{item.idnum}}</view>
+      <view class="td">{{item.sign1}}</view>
+      <view class="td">{{item.sign2}}</view>
+      <view class="td">{{item.sign3}}</view>
+      <view class="td">{{item.sign4}}</view>
+      <view class="td">{{item.sign5}}</view>
+      <view class="td">{{item.sign6}}</view>
+      <view class="td">{{item.sign7}}</view>
+      <view class="td">{{item.sign8}}</view>
+      <view class="td">{{item.sign9}}</view>
+      <view class="td">{{item.sign10}}</view>
+    </view>
+    <view class="tr" wx:else>
+      <view class="td">{{item.idnum}}</view>
+      <view class="td">{{item.sign1}}</view>
+      <view class="td">{{item.sign2}}</view>
+      <view class="td">{{item.sign3}}</view>
+      <view class="td">{{item.sign4}}</view>
+      <view class="td">{{item.sign5}}</view>
+      <view class="td">{{item.sign6}}</view>
+      <view class="td">{{item.sign7}}</view>
+      <view class="td">{{item.sign8}}</view>
+      <view class="td">{{item.sign9}}</view>
+      <view class="td">{{item.sign10}}</view>
+    </view>
+  </block>
+</view>
