@@ -1,0 +1,10 @@
+/* mypages/creatcourse/creatcourse.wxss */
+.section{
+  font-size: 12px;padding: 10px;border-top : solid 1px #eee;
+}
+.section input{
+  border: solid 1px #ccc;border-radius: 4px;
+}
+.section button{margin-bottom: 10px;}
+.section label{margin-right: 20px;}
+.picker{ border: solid 1px #ddd; padding: 10px}
