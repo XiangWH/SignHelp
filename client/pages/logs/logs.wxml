@@ -1,0 +1,10 @@
+<!--logs.wxml-->
+<view class="log-list">
+  <button bindtap='tapnamess'>登录</button>
+  <!--button bindtap='getSCourse'>测试getSCourses</button>
+  <button bindtap='joinClass'>测试joinClass</button>
+  <button bindtap='signIn2'>测试签到</button>
+  <button bindtap='updataSignIn'>测试更新签到信息</button>
+  <button bindtap='signIn1'>测试签到一</button-->
+  <button bindtap='exported'>测试导出签到表</button>
+</view>
