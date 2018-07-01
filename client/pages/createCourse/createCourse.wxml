@@ -1,0 +1,60 @@
+<!--mypages/creatcourse/creatcourse.wxml-->
+<view style="text-align:center"></view>
+
+<form bindsubmit = "submit" bindreset='reset'>
+
+<view class='section'>
+<view class='courseName'>课程名称</view>
+<input name = "courseName" placeholder='请输入课程名称' value = "{{courseName}}"/>
+</view>
+
+<view class='section'>
+<view class='placeofClass'>课程地点</view>
+<input name = "placeOfClass" placeholder='请输入上课地点' value = "{{placeOfClass}}"/>
+</view>
+
+<view class="section">
+  <view class="classTime1">本周第一次上课时间段</view>
+  <picker name = "classTime1" mode="time" value="{{classTime1}}" start="8:00" end="20:40" bindchange="bindTimeChange1">
+    <view class="picker">
+      请输入本周第一次上课开始时间: {{classTime1}}
+    </view>
+  </picker>
+</view>
+
+<view class='section'>
+<view class='classroom1'>本周第一次上课课室</view>
+<input name = "classroom1" placeholder='请输入本周第一次上课课室' value='{{classroom1}}'/>
+</view>
+
+<view class='section'>
+<view class="classTime2">本周第二次上课时间</view>
+  <picker name = "classTime2" mode="time" value="{{classTime2}}" start="8:00" end="20:40" bindchange="bindTimeChange3">
+    <view class="picker">
+      请输入本周第二次上课开始时间: {{classTime2}}
+    </view>
+  </picker>
+</view>
+
+<view class='section'>
+<view class='classroom2'>本周第二次上课课室</view>
+<input name = "classroom2" placeholder='请输入本周第二次上课课室' value='{{classroom2}}'/>
+</view>
+
+<view class='section'>
+<view class='allStudents'>课程学生总人数</view>
+<input name = "allStudents" placeholder='请输入课程学生总人数' value='{{allStudents}}'/>
+</view>
+
+<!--view class='section'>
+<view class='courseId'>课程ID</view>
+<input name = "courseId" placeholder='请输入该课程的特有ID' value = '{{courseId}}'/>
+</view-->
+
+
+<view class='section'>
+<button type='primary' form-type='submit'>提交</button>
+<button form-type='reset'>重置</button>
+</view>
+</form>
+
