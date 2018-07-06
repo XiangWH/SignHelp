@@ -1,0 +1,51 @@
+/* pages/student/student.wxss */
+.studentinfo {
+  display: flex;
+  flex-direction: row;
+}
+
+.studentinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  margin: 20rpx;
+  border-radius: 60%;
+}
+
+.studentinfo-name {
+  color: #aaa;
+  margin: 40rpx;
+}
+
+.join {
+   width: 400rpx;
+   margin-top: 100rpx;
+   margin-left: auto;
+   margin-right: auto;
+}
+
+ .classinfo {
+   width: 400rpx;
+   margin-top: 100rpx;
+   margin-left: auto;
+   margin-right: auto;
+ }
+ .button{
+    margin-top: 20rpx;
+    text-align: center;
+    margin: 40rpx 30rpx 30rpx 20rpx;
+}
+.list{
+    margin: 10rpx;
+    border-top:  1px solid gainsboro;
+  
+}
+.text{
+    color: green;
+    margin-left: 10rpx;
+    -moz-text-size-adjust: auto;
+}
+.text2{
+    color: gray;
+    margin-left: 10rpx;
+    -moz-text-size-adjust: auto;
+}

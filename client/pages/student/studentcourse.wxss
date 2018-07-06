@@ -1,0 +1,5 @@
+/* pages/student/studentcourse.wxss */
+.button{
+    margin-top: 20rpx;
+    text-align: center;
+}

@@ -1,0 +1,6 @@
+<!--pages/student/joincourse.wxml-->
+<view class='join'>
+<input class='joincourse'  bindinput='joincourseid' auto-focus placeholder='请输入课程ID'  confirm-type='done'></input>
+<button bindtap='takecourseId'>确定加入</button>
+<button bindtap='getback'>返回</button>
+</view>

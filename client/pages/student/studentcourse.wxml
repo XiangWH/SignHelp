@@ -1,0 +1,15 @@
+<!--pages/student/studentcourse.wxml-->
+<view class='coursedetail'>
+<text>课程名称：{{coursedata[0].courseName}}\n</text>
+<text>上课地点：{{coursedata[0].placeOfClass}}\n</text>
+<text>上课时间1：{{coursedata[0].classTime1}}\n</text>
+<text>课室1：{{coursedata[0].classroom1}}\n</text>
+<text>上课时间2：{{coursedata[0].classTime2}}\n</text>
+<text>课室2：{{coursedata[0].classroom2}}\n</text>
+
+</view>
+
+
+<view bindtap='signin'>
+<button>签到</button>
+</view>

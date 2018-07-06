@@ -1,0 +1,8 @@
+/* pages/student/joincourse.wxss */
+.join {
+  height: 300px;
+  width: 250px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 180px;
+}

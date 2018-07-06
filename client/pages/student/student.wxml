@@ -1,0 +1,26 @@
+<!--pages/student/student.wxml-->
+<!--学生信息-->
+<import src="../course_view_template2.wxml"/>
+<view class='studentinfo'>
+<block>
+      
+    </block>
+</view>
+
+<!--加入新课程-->
+<view class='join'>
+<button bindtap='joinCourse' class='button' >加入新课程</button>
+</view>
+
+
+<!--课程信息-->
+
+<scroll-view scroll-y='true' style='height : 550rpx'>
+<view class='list' wx:for="{{courseOfStudent}}" 
+data-id='{{courseId}}' >
+  <template is="course_view" data='{{...item}}'/>
+</view>
+  <view class='list'></view>
+  </scroll-view>
+
+
