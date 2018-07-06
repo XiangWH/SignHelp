@@ -1,0 +1,12 @@
+<template name="course_view">
+    <view data-id='{{courseId}}' bindtap='operateTap' bindlongpress='operateLongTap'
+    class='template' 
+    >
+    <text class='text'>{{courseName}}</text>
+    <view></view>
+    <text class='text2'>{{classTime1}}</text>
+    <text class='text2'>{{classRoom1}}</text>
+    <text class='text2'>| {{classTime2}}</text>
+    <text class='text2'>{{classRoom2}}</text>
+    </view>
+</template>
