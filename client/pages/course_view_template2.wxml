@@ -1,0 +1,12 @@
+<template name="course_view">
+    <view data-id='{{courseId}}' bindtap='operateTap'
+    class='template' 
+    >
+    <text class='text'>课程名称: {{courseName}}\n</text>
+    <view></view>
+    <text class='text2'>上课时间1: {{classTime1}}\n</text>
+    <text class='text2'>课室1：{{classRoom1}}3\n</text>
+    <text class='text2'>上课时间2：{{classTime2}}\n</text>
+    <text class='text2'>课室2：{{classRoom2}}\n</text>
+    </view>
+</template>
